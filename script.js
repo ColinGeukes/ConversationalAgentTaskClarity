@@ -422,7 +422,7 @@ function explainSnippet() {
         "Alright, you would like some more information about a snippet. A snippet is simply a part of a larger piece of text. If you were to take a document and randomly select a couple of subsequent sentences, this would be an example of a snippet. A snippet is usually what you also see on search engines. On the result page, you do not see the full text of every result, you instead only see a snippet."
     ];
 
-    const snippetExample = "A snippet of a larger text could for example be";//TODO: <insert snippet 1>
+    const snippetExample = "A snippet of a larger text could for example be 'Airplanes come in a variety of sizes, shapes, and wing configurations. The broad spectrum of uses for airplanes includes recreation, transportation of goods and people, military, and research.'";//TODO: <insert snippet 1>
 
     function showSnippet() {
         // Show snippet example.
@@ -527,16 +527,33 @@ function explainRelevance() {
         "A snippet is relevant to a query if they are about the same topic. In this case this will be about whether a query is relevant to a snippet of text. For example consider a snippet about the creation of jet fuel, thereby the query 'jet fuel components' is relevant. This is obviously relevant, because if there was an article of which the snippet provides details about it, it is likely that the article would mention the desired information. A snippet about stock market trading, would however not be relevant. This is obvious since the query mentions jet fuel components, which are unlike to be found in a snippet about stock market trading."
     ];
 
-    const relevanceExample = "Examples of queries could be: 'how old is the queen'; 'trading stocks easily'; or, 'jet fuel components'"; //TODO: THis is not the correct example
+    const examples = [
+        "For example consider a snippet about the creation of jet fuel, thereby the query 'jet fuel components' is relevant. A snippet about stock market trading, would however not be relevant.",
+        "For example consider a snippet about the creation of jet fuel, thereby the query 'jet fuel components' is relevant. A snippet about stock market trading, would however not be relevant.",
+        "For example consider a snippet about the creation of jet fuel, thereby the query 'jet fuel components' is relevant. This is obviously relevant, because if there was an article of which the snippet provides details about it, it is likely that the article would mention the desired information. A snippet about stock market trading, would however not be relevant. This is obvious since the query mentions jet fuel components, which are unlike to be found in a snippet about stock market trading."
+    ];
+
+    function showRelevanceExample() {
+        // Show relevance example.
+        chatbot.talk([{
+            msg: examples[textLength]
+        }, {
+            buttons: [{
+                button: "I understand, lets go back to the problem.",
+                func: intro
+            }]
+        }]);
+    }
 
     if (interactiveness) {
         chatbot.talk([
             {
                 msg: messages[textLength]
             }, {
-                msg: relevanceExample
-            }, {
                 buttons: [{
+                    button: "Give me a relevance example",
+                    func: showRelevanceExample
+                }, {
                     button: "I understand, lets go back to the problem.",
                     func: intro
                 }]
@@ -547,7 +564,7 @@ function explainRelevance() {
             {
                 msg: messages[textLength]
             }, {
-                msg: relevanceExample
+                msg: examples[textLength]
             }, {
                 buttons: [{
                     button: "I understand, continue.",
@@ -565,24 +582,104 @@ function explainScale() {
         "Relevance is given on a 4 point scale, 1 is not relevant and 4 is highly relevant. For example, something that is not related would get a 1, something vaguely related would get a 2, something related but not a perfect match would receive a 3, and finally the perfect relevance match would get a 4."
     ];
 
-    chatbot.talk([
-        {
-            msg: messages[textLength]
-        },
-        {
-            buttons: [{
-                button: "Alright, give me an example.",
-                func: () => {
-                    console.error("GIVE EXAMPLE: NOT IMPLEMENTED")
-                }
-            }, {
-                button: "Start the task.",
-                func: () => {
-                    console.error("START THE TASK: NOT IMPLEMENTED")
-                }
-            }]
-        },
-    ]);
+    const scaleExamples = [`=== 1 === IRRELEVANT
+    Q: "average building height amsterdam"
+    S: "Non-timber forest products (NTFPs) are useful foods, substances, materials and/or commodities obtained from forests other than timber. Harvest ranges from wild collection to farming. They typically include game animals, fur-bearers, nuts, seeds, berries, mushrooms, oils, sap, foliage, pollarding, medicinal plants, peat, mast, fuelwood, fish, insects, spices, and forage."`,
+        `=== 2 === PROBABLY NOT RELEVANT
+    Q: "temples in europe"
+    S: "The Bhringeswara Shiva temple is situated on the foothills of Dhauli and the left bank of the Daya River, in the southeastern outskirts of Bhubaneswar in the village Khatuapada. The temple is facing towards west and the presiding deity is a circular yoni pitha with a hole at the centre."`,
+        `=== 3 === PROBABLY RELEVANT
+    Q: "manager of irvine victoria"
+    S: "Irvine Victoria Football Club is a Scottish football club, based in the town of Irvine, North Ayrshire. Nicknamed Wee Vics and "Westenders", it was formed in 1904 and plays at Victoria Park, in Irvine. The team uniform is orange, blue and white stripes. Irvine Victoria play in the West of Scotland League Conference A."`,
+        `=== 4 === RELEVANT
+    Q: "oldest dodge diplomat"
+    S: "The Dodge Diplomat is an American mid-size car that was produced by Dodge from 1977 to 1989. It was built using the same design as the Plymouth Gran Fury in the U.S. market and the Plymouth Caravelle in Canada. It was also sold in Mexico between 1981 and 1982 as the Dodge Dart, and in Colombia as the Dodge Coronet."`];
+
+    let currentExample = -1;
+
+    function giveExample() {
+        currentExample++;
+
+        const talkScript = [];
+
+        // Append the example to the talkScript.
+        const exampleSplit = scaleExamples[currentExample].split("\n");
+        exampleSplit.forEach(entry => {
+            talkScript.push({msg: entry})
+        });
+
+        if (currentExample < scaleExamples.length - 1) {
+            if (interactiveness) {
+                talkScript.push({
+                    buttons: [{
+                        button: "Give me another example.",
+                        func: giveExample
+                    }, {
+                        button: "Start the task.",
+                        func: () => {
+                            console.error("START THE TASK: NOT IMPLEMENTED")
+                        }
+                    }]
+                });
+            } else {
+                talkScript.push({
+                    buttons: [{
+                        button: "Alright, continue.",
+                        func: giveExample
+                    }]
+                });
+            }
+        } else {
+            talkScript.push({
+                buttons: [{
+                    button: "Start the task.",
+                    func: () => {
+                        task();
+                    }
+                }]
+            });
+        }
+
+        // Show the talkScript.
+        chatbot.talk(talkScript);
+    }
+
+    if (interactiveness) {
+        chatbot.talk([
+            {
+                msg: messages[textLength]
+            },
+            {
+                buttons: [{
+                    button: "Alright, give me an example.",
+                    func: giveExample
+                }, {
+                    button: "Start the task.",
+                    func: () => {
+                        console.error("START THE TASK: NOT IMPLEMENTED")
+                    }
+                }]
+            },
+        ]);
+    } else {
+        chatbot.talk([
+            {
+                msg: messages[textLength]
+            },
+            {
+                buttons: [{
+                    button: "Alright, give me an example.",
+                    func: giveExample
+                }]
+            },
+        ]);
+    }
+}
+
+let taskNumber = 1;
+
+function task() {
+
 }
 
 // disable textarea, since we only care about button presses.
@@ -594,4 +691,4 @@ let textLength = 2; //S: 0, M: 1, L: 2
 let interactiveness = false;
 
 // Start the script.
-window.onload = postStartingMessage()();
+window.onload = postStartingMessage();
