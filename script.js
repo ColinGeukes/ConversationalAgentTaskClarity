@@ -101,8 +101,6 @@ let Chatbot = function (taketurn, show_message) {
     }
 };
 
-let userid = "";
-let answers = [];
 let task_completed = false;
 
 let start_time = 0;
@@ -600,13 +598,15 @@ function explainScale() {
     function giveExample() {
         currentExample++;
 
-        const talkScript = [];
+        const talkScript = splitStringIntoBubbles(scaleExamples[currentExample]);
 
         // Append the example to the talkScript.
-        const exampleSplit = scaleExamples[currentExample].split("\n");
-        exampleSplit.forEach(entry => {
-            talkScript.push({msg: entry})
-        });
+        // const exampleSplit = scaleExamples[currentExample].split("\n");
+        // exampleSplit.forEach(entry => {
+        //     talkScript.push({msg: entry})
+        // });
+        //
+
 
         if (currentExample < scaleExamples.length - 1) {
             if (interactiveness) {
@@ -616,9 +616,7 @@ function explainScale() {
                         func: giveExample
                     }, {
                         button: "Start the task.",
-                        func: () => {
-                            console.error("START THE TASK: NOT IMPLEMENTED")
-                        }
+                        func: task
                     }]
                 });
             } else {
@@ -633,9 +631,7 @@ function explainScale() {
             talkScript.push({
                 buttons: [{
                     button: "Start the task.",
-                    func: () => {
-                        task();
-                    }
+                    func: task
                 }]
             });
         }
@@ -655,9 +651,7 @@ function explainScale() {
                     func: giveExample
                 }, {
                     button: "Start the task.",
-                    func: () => {
-                        console.error("START THE TASK: NOT IMPLEMENTED")
-                    }
+                    func: task
                 }]
             },
         ]);
@@ -676,10 +670,72 @@ function explainScale() {
     }
 }
 
-let taskNumber = 1;
+function splitStringIntoBubbles(string) {
+    const talkScript = [];
+    const exampleSplit = string.split("\n");
+    exampleSplit.forEach(entry => {
+        talkScript.push({msg: entry})
+    });
+    return talkScript
+}
+
+let taskNumber = 0;
+let answers = {};
 
 function task() {
+    const tasks = [`Q: "How many legs does a spider have?"
+    S: "Scorpions have eight legs, and are easily recognized by a pair of grasping pincers and a narrow, segmented tail, often carried in a characteristic forward curve over the back and always ending with a stinger. The evolutionary history of scorpions goes back 435 million years. They mainly live in deserts but have adapted to a wide range of environmental conditions, and can be found on all continents except Antarctica. There are over 2,500 described species, with 22 extant (living) families recognized to date. Their taxonomy is being revised to account for 21st-century genomic studies."`,
+        `Q: "Who is the chairman of Chelsea?"
+    S: "Chelsea Football Club is an English professional football club based in Fulham, London. Founded in 1905, the club competes in the Premier League, the top division of English football. Chelsea are among England's most successful clubs, having won over thirty competitive honours, including six league titles and seven European trophies. Their home ground is Stamford Bridge."`,
+        `Q: "How large is Canada?"
+    S: "Canada is a country in North America. Its ten provinces and three territories extend from the Atlantic to the Pacific and northward into the Arctic Ocean, covering 9.98 million square kilometres (3.85 million square miles), making it the world's second-largest country by total area. Its southern and western border with the United States, stretching 8,891 kilometres (5,525 mi), is the world's longest bi-national land border. Canada's capital is Ottawa, and its three largest metropolitan areas are Toronto, Montreal, and Vancouver."`,
+        `Q: "Hockey clubs europe"
+    S: "The Great Lakes Collegiate Hockey League (GLCHL) is an American Collegiate Hockey Association (ACHA) Division I level ice hockey league. The GLCHL is made up of nine schools, eight of which are located in Michigan, with one school in Ohio."`,
+        `Q: "us militairy pilot fitness"
+    S: "The US Air Force Fitness Test (AFFT) is designed to test the abdominal circumference, muscular strength/endurance and cardiovascular respiratory fitness of airmen in the USAF. As part of the Fit to Fight program, the USAF adopted a more stringent physical fitness assessment; the new fitness program was put into effect on 1 June 2010."`,
+        `Q: "buy laptop or tablet for child"
+    S: "Around the world, members of Generation Z are spending more time on electronic devices and less time reading books than before, with implications for their attention span, their vocabulary and thus their school grades, as well as their future in the modern economy."`]
 
+    const talkScript = splitStringIntoBubbles("Task " + (taskNumber + 1) + "/" + tasks.length + "\n" + tasks[taskNumber]);
+
+    function answerTask(relevance) {
+        // Store the answer on the task.
+        answers['Q' + (taskNumber + 1)] = relevance;
+
+        // Increment the task number
+        taskNumber++;
+
+        // Check if the worker is done with the tasks
+        if (taskNumber < tasks.length) {
+            // Continue with the task.
+            task();
+        } else {
+            // Task is complete, start the survey.
+            survey();
+        }
+    }
+
+    talkScript.push({
+        buttons: [{
+            button: "Irrelevant",
+            func: () => answerTask(0)
+        }, {
+            button: "Probably not relevant",
+            func: () => answerTask(1)
+        }, {
+            button: "Probably relevant",
+            func: () => answerTask(2)
+        }, {
+            button: "Relevant",
+            func: () => answerTask(3)
+        }]
+    });
+
+    chatbot.talk(talkScript);
+}
+
+function survey() {
+    console.log("Answers so far: ", answers)
 }
 
 // disable textarea, since we only care about button presses.
@@ -688,7 +744,7 @@ document.getElementById("message").disabled = true;
 
 // Hyper-parameters setup.
 let textLength = 2; //S: 0, M: 1, L: 2
-let interactiveness = false;
+let interactiveness = true;
 
 // Start the script.
 window.onload = postStartingMessage();
