@@ -580,18 +580,23 @@ function explainScale() {
         "Relevance is given on a 4 point scale, 1 is not relevant and 4 is highly relevant. For example, something that is not related would get a 1, something vaguely related would get a 2, something related but not a perfect match would receive a 3, and finally the perfect relevance match would get a 4."
     ];
 
-    const scaleExamples = [`=== 1 === IRRELEVANT
-    Q: "average building height amsterdam"
-    S: "Non-timber forest products (NTFPs) are useful foods, substances, materials and/or commodities obtained from forests other than timber. Harvest ranges from wild collection to farming. They typically include game animals, fur-bearers, nuts, seeds, berries, mushrooms, oils, sap, foliage, pollarding, medicinal plants, peat, mast, fuelwood, fish, insects, spices, and forage."`,
-        `=== 2 === PROBABLY NOT RELEVANT
-    Q: "temples in europe"
-    S: "The Bhringeswara Shiva temple is situated on the foothills of Dhauli and the left bank of the Daya River, in the southeastern outskirts of Bhubaneswar in the village Khatuapada. The temple is facing towards west and the presiding deity is a circular yoni pitha with a hole at the centre."`,
-        `=== 3 === PROBABLY RELEVANT
-    Q: "manager of irvine victoria"
-    S: "Irvine Victoria Football Club is a Scottish football club, based in the town of Irvine, North Ayrshire. Nicknamed Wee Vics and "Westenders", it was formed in 1904 and plays at Victoria Park, in Irvine. The team uniform is orange, blue and white stripes. Irvine Victoria play in the West of Scotland League Conference A."`,
-        `=== 4 === RELEVANT
-    Q: "oldest dodge diplomat"
-    S: "The Dodge Diplomat is an American mid-size car that was produced by Dodge from 1977 to 1989. It was built using the same design as the Plymouth Gran Fury in the U.S. market and the Plymouth Caravelle in Canada. It was also sold in Mexico between 1981 and 1982 as the Dodge Dart, and in Colombia as the Dodge Coronet."`];
+    const scaleExamples = [
+        "The following snippet is <b>irrelevant</b> for the query.\n" +
+        "<b>Query:</b> \"average building height amsterdam\"\n" +
+        "<b>Snippet:</b> \"Non-timber forest products (NTFPs) are useful foods, substances, materials and/or commodities obtained from forests other than timber. Harvest ranges from wild collection to farming. They typically include game animals, fur-bearers, nuts, seeds, berries, mushrooms, oils, sap, foliage, pollarding, medicinal plants, peat, mast, fuelwood, fish, insects, spices, and forage.\"",
+
+        "The following snippet is <b>probably not relevant</b> for the query.\n" +
+        "<b>Query:</b> \"temples in europe\"\n" +
+        "<b>Snippet:</b> \"The Bhringeswara Shiva temple is situated on the foothills of Dhauli and the left bank of the Daya River, in the southeastern outskirts of Bhubaneswar in the village Khatuapada. The temple is facing towards west and the presiding deity is a circular yoni pitha with a hole at the centre.\"",
+
+        "The following snippet is <b>probably relevant</b> for the query.\n" +
+        "<b>Query:</b> \"manager of irvine victoria\"\n" +
+        "<b>Snippet:</b> \"Irvine Victoria Football Club is a Scottish football club, based in the town of Irvine, North Ayrshire. Nicknamed Wee Vics and \"Westenders\", it was formed in 1904 and plays at Victoria Park, in Irvine. The team uniform is orange, blue and white stripes. Irvine Victoria play in the West of Scotland League Conference A.\"",
+
+        "The following snippet is <b>relevant</b> for the query.\n" +
+        "<b>Query:</b> \"oldest dodge diplomat\"\n" +
+        "<b>Snippet:</b> \"The Dodge Diplomat is an American mid-size car that was produced by Dodge from 1977 to 1989. It was built using the same design as the Plymouth Gran Fury in the U.S. market and the Plymouth Caravelle in Canada. It was also sold in Mexico between 1981 and 1982 as the Dodge Dart, and in Colombia as the Dodge Coronet.\""
+    ];
 
     let currentExample = -1;
 
@@ -683,18 +688,20 @@ let taskNumber = 0;
 let answers = {};
 
 function task() {
-    const tasks = [`<b>Query:</b> "How many legs does a spider have?"
-    <b>Snippet:</b> "Scorpions have eight legs, and are easily recognized by a pair of grasping pincers and a narrow, segmented tail, often carried in a characteristic forward curve over the back and always ending with a stinger. The evolutionary history of scorpions goes back 435 million years. They mainly live in deserts but have adapted to a wide range of environmental conditions, and can be found on all continents except Antarctica. There are over 2,500 described species, with 22 extant (living) families recognized to date. Their taxonomy is being revised to account for 21st-century genomic studies."`,
-        `<b>Query:</b>: "Who is the chairman of Chelsea?"
-    <b>Snippet:</b> "Chelsea Football Club is an English professional football club based in Fulham, London. Founded in 1905, the club competes in the Premier League, the top division of English football. Chelsea are among England's most successful clubs, having won over thirty competitive honours, including six league titles and seven European trophies. Their home ground is Stamford Bridge."`,
-        `<b>Query:</b>: "How large is Canada?"
-    <b>Snippet:</b> "Canada is a country in North America. Its ten provinces and three territories extend from the Atlantic to the Pacific and northward into the Arctic Ocean, covering 9.98 million square kilometres (3.85 million square miles), making it the world's second-largest country by total area. Its southern and western border with the United States, stretching 8,891 kilometres (5,525 mi), is the world's longest bi-national land border. Canada's capital is Ottawa, and its three largest metropolitan areas are Toronto, Montreal, and Vancouver."`,
-        `<b>Query:</b>: "Hockey clubs europe"
-    <b>Snippet:</b> "The Great Lakes Collegiate Hockey League (GLCHL) is an American Collegiate Hockey Association (ACHA) Division I level ice hockey league. The GLCHL is made up of nine schools, eight of which are located in Michigan, with one school in Ohio."`,
-        `<b>Query:</b>: "us militairy pilot fitness"
-    <b>Snippet:</b> "The US Air Force Fitness Test (AFFT) is designed to test the abdominal circumference, muscular strength/endurance and cardiovascular respiratory fitness of airmen in the USAF. As part of the Fit to Fight program, the USAF adopted a more stringent physical fitness assessment; the new fitness program was put into effect on 1 June 2010."`,
-        `<b>Query:</b>: "buy laptop or tablet for child"
-    <b>Snippet:</b> "Around the world, members of Generation Z are spending more time on electronic devices and less time reading books than before, with implications for their attention span, their vocabulary and thus their school grades, as well as their future in the modern economy."`]
+    const tasks = [
+        "<b>Query:</b> \"How many legs does a spider have?\"\n" +
+        "<b>Snippet:</b> \"Scorpions have eight legs, and are easily recognized by a pair of grasping pincers and a narrow, segmented tail, often carried in a characteristic forward curve over the back and always ending with a stinger. The evolutionary history of scorpions goes back 435 million years. They mainly live in deserts but have adapted to a wide range of environmental conditions, and can be found on all continents except Antarctica. There are over 2,500 described species, with 22 extant (living) families recognized to date. Their taxonomy is being revised to account for 21st-century genomic studies.\"",
+        "<b>Query:</b> \"Who is the chairman of Chelsea?\"\n" +
+        "<b>Snippet:</b> \"Chelsea Football Club is an English professional football club based in Fulham, London. Founded in 1905, the club competes in the Premier League, the top division of English football. Chelsea are among England's most successful clubs, having won over thirty competitive honours, including six league titles and seven European trophies. Their home ground is Stamford Bridge.\"",
+        "<b>Query:</b> \"How large is Canada?\"\n" +
+        "<b>Snippet:</b> \"Canada is a country in North America. Its ten provinces and three territories extend from the Atlantic to the Pacific and northward into the Arctic Ocean, covering 9.98 million square kilometres (3.85 million square miles), making it the world's second-largest country by total area. Its southern and western border with the United States, stretching 8,891 kilometres (5,525 mi), is the world's longest bi-national land border. Canada's capital is Ottawa, and its three largest metropolitan areas are Toronto, Montreal, and Vancouver.\"",
+        "<b>Query:</b> \"Hockey clubs europe\"\n" +
+        "<b>Snippet:</b> \"The Great Lakes Collegiate Hockey League (GLCHL) is an American Collegiate Hockey Association (ACHA) Division I level ice hockey league. The GLCHL is made up of nine schools, eight of which are located in Michigan, with one school in Ohio.\"",
+        "<b>Query:</b> \"us militairy pilot fitness\"\n" +
+        "<b>Snippet:</b> \"The US Air Force Fitness Test (AFFT) is designed to test the abdominal circumference, muscular strength/endurance and cardiovascular respiratory fitness of airmen in the USAF. As part of the Fit to Fight program, the USAF adopted a more stringent physical fitness assessment; the new fitness program was put into effect on 1 June 2010.\"",
+        "<b>Query:</b> \"buy laptop or tablet for child\"\n" +
+        "<b>Snippet:</b> \"Around the world, members of Generation Z are spending more time on electronic devices and less time reading books than before, with implications for their attention span, their vocabulary and thus their school grades, as well as their future in the modern economy.\""
+    ];
 
     const talkScript = splitStringIntoBubbles("Task " + (taskNumber + 1) + "/" + tasks.length + "\n" + tasks[taskNumber]);
 
@@ -752,10 +759,10 @@ function survey() {
         survey: "Rate the overall task clarity of the tasks presented above on the following scale",
         buttons: clarityButtons
     }, {
-        survey: "To what extent did the <b>GOAL CLARITY</b> influence your overall task clarity rating?",
+        survey: "To what extent did the <b>goal clarity</b> influence your overall task clarity rating?",
         buttons: influenceButtons
     }, {
-        survey: "To what extent did the <b>ROLE CLARITY</b> influence your overall task clarity rating?",
+        survey: "To what extent did the <b>role clarity</b> influence your overall task clarity rating?",
         buttons: influenceButtons
     }];
 
@@ -794,7 +801,9 @@ function survey() {
 
 function complete() {
     chatbot.talk([{
-        msg: "Thank you very much, you are now free to leave the task."
+        msg: "The task is completed, thank you very much!"
+    }, {
+        msg: "You are now free to leave the task."
     }]);
 
     // TODO: Send the answers back to Toloka.
