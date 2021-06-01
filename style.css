@@ -1,16 +1,16 @@
 /* STYLESHEET FROM: https://sihang.nl/ticktalkturk/style/client.css */
 
-::-webkit-scrollbar{
-    display:none;
+::-webkit-scrollbar {
+    display: none;
 }
 
 html {
     scroll-behavior: smooth;
 }
 
-body{
+body {
     /* background-image: url('https://qiusihang.github.io/ticktalkturk/style/pattern.png'); */
-    background:#e6e6e6;
+    background: #e6e6e6;
 }
 
 #container {
@@ -60,7 +60,7 @@ body{
     vertical-align: middle;
     cursor: pointer;
     border-radius: 0px 5px 5px 0px;
-    transition:.2s ease-out;
+    transition: .2s ease-out;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -68,6 +68,7 @@ body{
     -ms-user-select: none;
     user-select: none;
 }
+
 /* #send-button:hover {
     background: #d9d9d9;
 } */
@@ -79,14 +80,14 @@ body{
     left: 10px;
     right: 60px;
     overflow: hidden;
-    background-color:#ffffff;
+    background-color: #ffffff;
     border-radius: 5px 0px 0px 5px;
 }
 
 #message {
     position: absolute;
-    border:0;
-    background-color:#ffffff;
+    border: 0;
+    background-color: #ffffff;
     left: 10px;
     bottom: 10px;
     height: 40px;
@@ -95,11 +96,15 @@ body{
     font-size: 14px;
     color: #333333;
     font-family: Helvetica, Arial, sans-serif;
-    outline:none;
+    outline: none;
     /* overflow-y: scroll; */
     white-space: nowrap;
     overflow-x: scroll;
     resize: none;
+}
+
+.bubble b {
+    font-size: larger;
 }
 
 #message-cover {
@@ -141,32 +146,33 @@ body{
 }
 
 .bubble {
-    float:left;
-    display:inline-block;
-    -webkit-box-sizing:content-box;
-    -moz-box-sizing:content-box;
-    box-sizing:content-box;
-    padding:6px 12px;
-    line-height:22px;
-    max-width:calc(80% - 50px);
-    min-width:100px;
-    font-size:12px;
+    float: left;
+    display: inline-block;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    padding: 6px 12px;
+    line-height: 22px;
+    max-width: calc(80% - 50px);
+    min-width: 100px;
+    font-size: 12px;
     font-family: Helvetica, Arial, sans-serif;
-    letter-spacing:1px;
-    text-align:left;
-    vertical-align:middle;
-    word-wrap:normal;
+    letter-spacing: 1px;
+    text-align: left;
+    vertical-align: middle;
+    word-wrap: normal;
     word-break: break-all;
     white-space: normal;
     background: #ffffff;
     border-radius: 0px 15px 5px 15px;
     word-break: keep-all;
     word-wrap: break-word;
-    box-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
 }
+
 .left-arrow {
-    float:left;
-    display:inline-block;
+    float: left;
+    display: inline-block;
     width: 0;
     height: 0;
     border-top: 5px solid #ffffff;
@@ -174,22 +180,23 @@ body{
 }
 
 .bubble-me {
-    float:right;
-    display:inline-block;
-    -webkit-box-sizing:content-box;
-    -moz-box-sizing:content-box;
-    box-sizing:content-box;
-    padding:6px 12px;
-    line-height:22px;
-    max-width:calc(80% - 50px);
-    min-width:100px;
-    font-size:12px;
+    float: right;
+    display: inline-block;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    padding: 6px 12px;
+    line-height: 22px;
+    max-width: calc(80% - 50px);
+    min-width: 100px;
+    font-size: 12px;
     font-family: Helvetica, Arial, sans-serif;
-    letter-spacing:1px;
-    text-align:left;
-    vertical-align:middle;
-    word-wrap:normal;
-    word-break: break-all;white-space: normal;
+    letter-spacing: 1px;
+    text-align: left;
+    vertical-align: middle;
+    word-wrap: normal;
+    word-break: break-all;
+    white-space: normal;
     /* background: #808080;
     color: #ffffff; */
     background: #d9ffcc;
@@ -197,11 +204,12 @@ body{
     border-radius: 15px 0px 15px 5px;
     word-break: keep-all;
     word-wrap: break-word;
-    box-shadow: -1px 1px 1px rgba(0,0,0,0.2);
+    box-shadow: -1px 1px 1px rgba(0, 0, 0, 0.2);
 }
+
 .right-arrow {
-    float:right;
-    display:inline-block;
+    float: right;
+    display: inline-block;
     width: 0;
     height: 0;
     /* border-top: 5px solid #808080; */
@@ -210,40 +218,42 @@ body{
 }
 
 .notification {
-    display:inline-block;
-    -webkit-box-sizing:content-box;
-    -moz-box-sizing:content-box;
-    box-sizing:content-box;
-    line-height:20px;
-    width:100%;
-    font-size:10px;
+    display: inline-block;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    line-height: 20px;
+    width: 100%;
+    font-size: 10px;
     font-family: Helvetica, Arial, sans-serif;
     color: #666666;
-    letter-spacing:1px;
-    text-align:center;
-    vertical-align:middle;
-    word-wrap:normal;
-    word-break: break-all;white-space: normal;
+    letter-spacing: 1px;
+    text-align: center;
+    vertical-align: middle;
+    word-wrap: normal;
+    word-break: break-all;
+    white-space: normal;
 }
 
 .button {
-    display:inline-block;
-    -webkit-box-sizing:content-box;
-    -moz-box-sizing:content-box;
-    box-sizing:content-box;
-    padding:6px 12px;
+    display: inline-block;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    padding: 6px 12px;
     margin-left: 5px;
     margin-bottom: 5px;
-    line-height:22px;
-    max-width:calc(80% - 50px);
-    min-width:50px;
-    font-size:12px;
+    line-height: 22px;
+    max-width: calc(80% - 50px);
+    min-width: 50px;
+    font-size: 12px;
     font-family: Helvetica, Arial, sans-serif;
-    letter-spacing:1px;
-    text-align:center;
-    vertical-align:middle;
-    word-wrap:normal;
-    word-break: break-all;white-space: normal;
+    letter-spacing: 1px;
+    text-align: center;
+    vertical-align: middle;
+    word-wrap: normal;
+    word-break: break-all;
+    white-space: normal;
     /* background: #cccccc;
     color: #666666; */
     background: rgba(71, 71, 107, 0.5);
@@ -253,18 +263,20 @@ body{
     word-wrap: break-word;
     /* box-shadow: 0px 1px 1px rgba(0,0,0,0.2); */
     cursor: pointer;
-    transition:.2s ease-out;
+    transition: .2s ease-out;
     user-select: none;
-}.button:hover {
-     background: rgba(71, 71, 107, 1);
-     /* background: #d9d9d9; */
- }
+}
+
+.button:hover {
+    background: rgba(71, 71, 107, 1);
+    /* background: #d9d9d9; */
+}
 
 .profile-image {
-    display:inline-block;
-    -webkit-box-sizing:content-box;
-    -moz-box-sizing:content-box;
-    box-sizing:content-box;
+    display: inline-block;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
     background: #f2f2f2;
     width: 50px;
     height: 50px;
@@ -272,21 +284,19 @@ body{
     margin-right: 10px;
     border-radius: 5px;
 }
+
 .profile-image-charac {
     width: 50px;
-    height:12px;
+    height: 12px;
     line-height: 12px;
     vertical-align: middle;
     text-align: center;
-    letter-spacing:0px;
+    letter-spacing: 0px;
     font-family: Helvetica, Arial, sans-serif;
     font-size: 7px;
     border-radius: 6px;
     color: #ffffff;
 }
-
-
-
 
 /* Slide style */
 
@@ -320,8 +330,6 @@ body{
     cursor: pointer;
 }
 
-
-
 /*
 Loading animation - thanks to: https://loading.io/css
 */
@@ -332,6 +340,7 @@ Loading animation - thanks to: https://loading.io/css
     width: 64px;
     height: 30px;
 }
+
 .lds-ellipsis div {
     position: absolute;
     top: 27px;
@@ -341,22 +350,27 @@ Loading animation - thanks to: https://loading.io/css
     background: #fff;
     animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
+
 .lds-ellipsis div:nth-child(1) {
     left: 6px;
     animation: lds-ellipsis1 0.6s infinite;
 }
+
 .lds-ellipsis div:nth-child(2) {
     left: 6px;
     animation: lds-ellipsis2 0.6s infinite;
 }
+
 .lds-ellipsis div:nth-child(3) {
     left: 26px;
     animation: lds-ellipsis2 0.6s infinite;
 }
+
 .lds-ellipsis div:nth-child(4) {
     left: 45px;
     animation: lds-ellipsis3 0.6s infinite;
 }
+
 @keyframes lds-ellipsis1 {
     0% {
         transform: scale(0);
@@ -365,6 +379,7 @@ Loading animation - thanks to: https://loading.io/css
         transform: scale(1);
     }
 }
+
 @keyframes lds-ellipsis3 {
     0% {
         transform: scale(1);
@@ -373,6 +388,7 @@ Loading animation - thanks to: https://loading.io/css
         transform: scale(0);
     }
 }
+
 @keyframes lds-ellipsis2 {
     0% {
         transform: translate(0, 0);

@@ -683,18 +683,18 @@ let taskNumber = 0;
 let answers = {};
 
 function task() {
-    const tasks = [`Q: "How many legs does a spider have?"
-    S: "Scorpions have eight legs, and are easily recognized by a pair of grasping pincers and a narrow, segmented tail, often carried in a characteristic forward curve over the back and always ending with a stinger. The evolutionary history of scorpions goes back 435 million years. They mainly live in deserts but have adapted to a wide range of environmental conditions, and can be found on all continents except Antarctica. There are over 2,500 described species, with 22 extant (living) families recognized to date. Their taxonomy is being revised to account for 21st-century genomic studies."`,
-        `Q: "Who is the chairman of Chelsea?"
-    S: "Chelsea Football Club is an English professional football club based in Fulham, London. Founded in 1905, the club competes in the Premier League, the top division of English football. Chelsea are among England's most successful clubs, having won over thirty competitive honours, including six league titles and seven European trophies. Their home ground is Stamford Bridge."`,
-        `Q: "How large is Canada?"
-    S: "Canada is a country in North America. Its ten provinces and three territories extend from the Atlantic to the Pacific and northward into the Arctic Ocean, covering 9.98 million square kilometres (3.85 million square miles), making it the world's second-largest country by total area. Its southern and western border with the United States, stretching 8,891 kilometres (5,525 mi), is the world's longest bi-national land border. Canada's capital is Ottawa, and its three largest metropolitan areas are Toronto, Montreal, and Vancouver."`,
-        `Q: "Hockey clubs europe"
-    S: "The Great Lakes Collegiate Hockey League (GLCHL) is an American Collegiate Hockey Association (ACHA) Division I level ice hockey league. The GLCHL is made up of nine schools, eight of which are located in Michigan, with one school in Ohio."`,
-        `Q: "us militairy pilot fitness"
-    S: "The US Air Force Fitness Test (AFFT) is designed to test the abdominal circumference, muscular strength/endurance and cardiovascular respiratory fitness of airmen in the USAF. As part of the Fit to Fight program, the USAF adopted a more stringent physical fitness assessment; the new fitness program was put into effect on 1 June 2010."`,
-        `Q: "buy laptop or tablet for child"
-    S: "Around the world, members of Generation Z are spending more time on electronic devices and less time reading books than before, with implications for their attention span, their vocabulary and thus their school grades, as well as their future in the modern economy."`]
+    const tasks = [`<b>Query:</b> "How many legs does a spider have?"
+    <b>Snippet:</b> "Scorpions have eight legs, and are easily recognized by a pair of grasping pincers and a narrow, segmented tail, often carried in a characteristic forward curve over the back and always ending with a stinger. The evolutionary history of scorpions goes back 435 million years. They mainly live in deserts but have adapted to a wide range of environmental conditions, and can be found on all continents except Antarctica. There are over 2,500 described species, with 22 extant (living) families recognized to date. Their taxonomy is being revised to account for 21st-century genomic studies."`,
+        `<b>Query:</b>: "Who is the chairman of Chelsea?"
+    <b>Snippet:</b> "Chelsea Football Club is an English professional football club based in Fulham, London. Founded in 1905, the club competes in the Premier League, the top division of English football. Chelsea are among England's most successful clubs, having won over thirty competitive honours, including six league titles and seven European trophies. Their home ground is Stamford Bridge."`,
+        `<b>Query:</b>: "How large is Canada?"
+    <b>Snippet:</b> "Canada is a country in North America. Its ten provinces and three territories extend from the Atlantic to the Pacific and northward into the Arctic Ocean, covering 9.98 million square kilometres (3.85 million square miles), making it the world's second-largest country by total area. Its southern and western border with the United States, stretching 8,891 kilometres (5,525 mi), is the world's longest bi-national land border. Canada's capital is Ottawa, and its three largest metropolitan areas are Toronto, Montreal, and Vancouver."`,
+        `<b>Query:</b>: "Hockey clubs europe"
+    <b>Snippet:</b> "The Great Lakes Collegiate Hockey League (GLCHL) is an American Collegiate Hockey Association (ACHA) Division I level ice hockey league. The GLCHL is made up of nine schools, eight of which are located in Michigan, with one school in Ohio."`,
+        `<b>Query:</b>: "us militairy pilot fitness"
+    <b>Snippet:</b> "The US Air Force Fitness Test (AFFT) is designed to test the abdominal circumference, muscular strength/endurance and cardiovascular respiratory fitness of airmen in the USAF. As part of the Fit to Fight program, the USAF adopted a more stringent physical fitness assessment; the new fitness program was put into effect on 1 June 2010."`,
+        `<b>Query:</b>: "buy laptop or tablet for child"
+    <b>Snippet:</b> "Around the world, members of Generation Z are spending more time on electronic devices and less time reading books than before, with implications for their attention span, their vocabulary and thus their school grades, as well as their future in the modern economy."`]
 
     const talkScript = splitStringIntoBubbles("Task " + (taskNumber + 1) + "/" + tasks.length + "\n" + tasks[taskNumber]);
 
@@ -734,8 +734,71 @@ function task() {
     chatbot.talk(talkScript);
 }
 
+let surveyNumber = 0;
+
 function survey() {
-    console.log("Answers so far: ", answers)
+    const clarityButtons = ["Very vague", "Vague", "Neutral", "Clear", "Very clear"];
+    const influenceButtons = ["No influence", "Slight influence", "Some influence", "Much influence", "Complete influence"];
+
+    const surveys = [{
+        survey: "Thank you very much for your valuable contributions!\n" +
+        "Now only a small survey is left regarding the tasks.\n" +
+        "<b>Goal clarity</b> - To what extent is the goal or desired outcome of the task clear?",
+        buttons: clarityButtons
+    }, {
+        survey: "<b>Role clarity</b> - To what extent are the steps or activities required to achieve the desired outcome of the task clear",
+        buttons: clarityButtons
+    }, {
+        survey: "Rate the overall task clarity of the tasks presented above on the following scale",
+        buttons: clarityButtons
+    }, {
+        survey: "To what extent did the <b>GOAL CLARITY</b> influence your overall task clarity rating?",
+        buttons: influenceButtons
+    }, {
+        survey: "To what extent did the <b>ROLE CLARITY</b> influence your overall task clarity rating?",
+        buttons: influenceButtons
+    }];
+
+    const talkScript = splitStringIntoBubbles(surveys[surveyNumber].survey);
+
+    function answerSurvey(relevance) {
+        // Store the answer on the task.
+        answers['S' + (surveyNumber + 1)] = relevance;
+
+        // Increment the task number
+        surveyNumber++;
+
+        // Check if the worker is done with the tasks
+        if (surveyNumber < surveys.length) {
+            // Continue with the task.
+            survey();
+        } else {
+            // Task is complete, start the survey.
+            complete();
+        }
+    }
+
+    // Create the survey buttons from the template.
+    let surveyButtons = [];
+    surveys[surveyNumber].buttons.forEach((text, index) => {
+        surveyButtons.push({
+            button: text,
+            func: () => answerSurvey(index)
+        })
+    });
+
+    // Add the survey buttons to the talk script and show the script.
+    talkScript.push({buttons: surveyButtons});
+    chatbot.talk(talkScript);
+}
+
+function complete() {
+    chatbot.talk([{
+        msg: "Thank you very much, you are now free to leave the task."
+    }]);
+
+    // TODO: Send the answers back to Toloka.
+    console.log("The answers on the task: ", answers);
 }
 
 // disable textarea, since we only care about button presses.
