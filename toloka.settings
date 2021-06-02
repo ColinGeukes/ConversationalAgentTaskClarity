@@ -1,0 +1,67 @@
+=== HTML ===
+
+<!-- src="https://sander.gielisse.me/toloka/index.html" -->
+<iframe class="theframe" style="width: 100% !important; height: calc(100% - 80px);" scrolling="no" frameBorder="0"/>
+
+=== Javascript ===
+
+exports.Task = extend(TolokaHandlebarsTask, function (options) {
+  TolokaHandlebarsTask.call(this, options);
+}, {
+  onRender: function() {
+    // DOM element for task is formed (available via #getDOMElement())  
+    console.log("rendered!");
+    var main = this;
+    main.setSolutionOutputValue("hasfinished", false);
+
+    // generate an identifier
+
+    // Generate an identifier for this user
+    function makeid(length) {
+        var result           = [];
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+          result.push(characters.charAt(Math.floor(Math.random() * charactersLength)));
+      }
+      return result.join('');
+    }
+    var identifier = makeid(16)
+    console.log('identifier ' + identifier)
+    var frame = this.getDOMElement().querySelector('.theframe');
+    frame.src = "https://sander.gielisse.me/request_file?filename=0&identifier=" + identifier;
+
+    // start a timed task of asking whether this ID has finished its task
+    setInterval(function() {
+      fetch('https://sander.gielisse.me/isdone?id=' + identifier)
+        .then(response => response.json())
+        .then(function(data) {
+          console.log(data)
+          if (data == true){
+            main.setSolutionOutputValue("hasfinished", true);
+          }
+        });
+    }, 1000); // check every second
+  },
+  onDestroy: function() {
+    // Task is completed. Global resources can be released (if used) 
+  }
+});
+
+function extend(ParentClass, constructorFunction, prototypeHash) {
+  constructorFunction = constructorFunction || function () {};
+  prototypeHash = prototypeHash || {};
+  if (ParentClass) {
+    constructorFunction.prototype = Object.create(ParentClass.prototype);
+  }
+  for (var i in prototypeHash) {
+    constructorFunction.prototype[i] = prototypeHash[i];
+  }
+  return constructorFunction;
+}
+
+=== CSS ===
+
+.task {
+    width: calc(100% - 20px) !important;
+}
