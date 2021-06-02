@@ -799,15 +799,39 @@ function survey() {
     chatbot.talk(talkScript);
 }
 
+
+function post(path, params, method='post') {
+    const form = document.createElement('form');
+    form.method = method;
+    form.action = path;
+    form.target = "dummyframe";
+  
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        const hiddenField = document.createElement('input');
+        hiddenField.type = 'hidden';
+        hiddenField.name = key;
+        hiddenField.value = params[key];
+  
+        form.appendChild(hiddenField);
+      }
+    }
+  
+    document.body.appendChild(form);
+    form.submit();
+}
+
 function complete() {
     chatbot.talk([{
         msg: "The task is completed, thank you very much!"
     }, {
-        msg: "You are now free to leave the task."
+        msg: "You are now free to leave the task by clicking the submit button below."
     }]);
 
     // TODO: Send the answers back to Toloka.
     console.log("The answers on the task: ", answers);
+    answers['id'] = identifier;
+    post("https://sander.gielisse.me/confirm_answers", answers);
 }
 
 // disable textarea, since we only care about button presses.
@@ -815,8 +839,11 @@ document.getElementById("message-cover").style.display = "block";
 document.getElementById("message").disabled = true;
 
 // Hyper-parameters setup.
-let textLength = 2; //S: 0, M: 1, L: 2
+let textLength = 0; //S: 0, M: 1, L: 2
 let interactiveness = true;
+
+let identifier = "%IDENTIFIER%";
+console.log("Starting chatbot with identifier ", identifier)
 
 // Start the script.
 window.onload = postStartingMessage();
