@@ -661,6 +661,9 @@ function explainScale() {
                 msg: messages[textLength]
             },
             {
+                msg: "Now 4 examples will be shown for each entry of the 4 point scale."
+            },
+            {
                 buttons: [{
                     button: "Alright, give me an example.",
                     func: giveExample
@@ -680,12 +683,6 @@ function splitStringIntoBubbles(string) {
 }
 
 let taskNumber = 0;
-let answers = {
-    flow: [],
-    task: {},
-    attention: {},
-    survey: {}
-};
 
 function task() {
     const tasks = [
@@ -885,7 +882,19 @@ document.getElementById("message").disabled = true;
 
 // Hyper-parameters setup.
 let textLength = 0; //S: 0, M: 1, L: 2
-let interactiveness = false;
+let interactiveness = true;
+
+// The answers provided by the user, and we put the hyper-parameters there in order to not mess up the different types.
+let answers = {
+    params: {
+        textLength: textLength,
+        interactiveness: interactiveness
+    },
+    flow: [],
+    task: {},
+    attention: {},
+    survey: {}
+};
 
 let identifier = "%IDENTIFIER%";
 console.log("Starting chatbot with identifier ", identifier);
