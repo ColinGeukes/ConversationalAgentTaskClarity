@@ -723,7 +723,7 @@ function attentionQuestion() {
     }
 
     chatbot.talk([{
-        msg: "Now a small question to check your attention on the tasks: \"How many legs does a scorpion have?\""
+        msg: "Now a small question to check if you have been paying attention to the tasks: \"How many legs does a scorpion have?\""
     }, {
         buttons: [{
             button: "Two",
