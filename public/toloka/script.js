@@ -1,28 +1,3 @@
-// TODO: Implement Toloka tasks as they would like it.
-// exports.Task = extend(TolokaHandlebarsTask, function (options) {
-//     TolokaHandlebarsTask.call(this, options);
-// }, {
-//     onRender: function () {
-//         // DOM element for task is formed (available via #getDOMElement())
-//     },
-//     onDestroy: function () {
-//         // Task is completed. Global resources can be released (if used)
-//     }
-// });
-//
-// function extend(ParentClass, constructorFunction, prototypeHash) {
-//     constructorFunction = constructorFunction || function () {
-//     };
-//     prototypeHash = prototypeHash || {};
-//     if (ParentClass) {
-//         constructorFunction.prototype = Object.create(ParentClass.prototype);
-//     }
-//     for (var i in prototypeHash) {
-//         constructorFunction.prototype[i] = prototypeHash[i];
-//     }
-//     return constructorFunction;
-// }
-
 let Chatbot = function (taketurn, show_message) {
 
     this.taketurn = taketurn;
@@ -869,14 +844,13 @@ function complete() {
         msg: "You are now free to leave the task by clicking the submit button below."
     }]);
 
-    // TODO: Send the answers back to Toloka.
+    // Send the answers back to Toloka / Sanders personal website for convenience.
     console.log("The answers on the task: ", answers);
     answers['id'] = identifier;
     post("https://sander.gielisse.me/confirm_answers", answers);
 }
 
-
-// disable textarea, since we only care about button presses.
+// disable textArea, since we only care about button presses.
 document.getElementById("message-cover").style.display = "block";
 document.getElementById("message").disabled = true;
 
