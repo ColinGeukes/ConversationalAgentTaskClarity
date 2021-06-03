@@ -407,7 +407,7 @@ function intro() {
             },
             {
                 buttons: [{
-                    button: "What is a snippet",
+                    button: "What is a snippet?",
                     func: explainSnippet
                 }]
             },
@@ -462,7 +462,7 @@ function explainSnippet() {
             },
             {
                 buttons: [{
-                    button: "I understand, continue.",
+                    button: "I understand, what is a query?",
                     func: explainQuery
                 }]
             },
@@ -513,7 +513,7 @@ function explainQuery() {
                 msg: queryExample
             }, {
                 buttons: [{
-                    button: "I understand, continue.",
+                    button: "I understand, what is relevance?",
                     func: explainRelevance
                 }]
             },
@@ -568,7 +568,7 @@ function explainRelevance() {
                 msg: examples[textLength]
             }, {
                 buttons: [{
-                    button: "I understand, continue.",
+                    button: "That makes sense, give me the details.",
                     func: explainScale
                 }]
             },
@@ -608,14 +608,6 @@ function explainScale() {
 
         const talkScript = splitStringIntoBubbles(scaleExamples[currentExample]);
 
-        // Append the example to the talkScript.
-        // const exampleSplit = scaleExamples[currentExample].split("\n");
-        // exampleSplit.forEach(entry => {
-        //     talkScript.push({msg: entry})
-        // });
-        //
-
-
         if (currentExample < scaleExamples.length - 1) {
             if (interactiveness) {
                 talkScript.push({
@@ -630,7 +622,7 @@ function explainScale() {
             } else {
                 talkScript.push({
                     buttons: [{
-                        button: "Alright, continue.",
+                        button: "Alright, give me another example.",
                         func: giveExample
                     }]
                 });
@@ -893,7 +885,7 @@ document.getElementById("message").disabled = true;
 
 // Hyper-parameters setup.
 let textLength = 0; //S: 0, M: 1, L: 2
-let interactiveness = true;
+let interactiveness = false;
 
 let identifier = "%IDENTIFIER%";
 console.log("Starting chatbot with identifier ", identifier);
