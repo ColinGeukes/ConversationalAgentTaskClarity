@@ -143,6 +143,9 @@ let survey_validate = function (input) {
     let retFunc = false;
     current_question.buttons.forEach(e => {
         if (strip(e.button) === strippedInput) {
+            // Store the flow of the selected button.
+            recordUserFlow(strippedInput);
+
             retFunc = e.func;
         }
     });
@@ -685,12 +688,15 @@ function splitStringIntoBubbles(string) {
 }
 
 let taskNumber = 0;
-let answers = {};
+let answers = {
+    flow: [],
+    task: {},
+    attention: {},
+    survey: {}
+};
 
 function task() {
     const tasks = [
-        "<b>Query:</b> \"How many legs does a spider have?\"\n" +
-        "<b>Snippet:</b> \"Scorpions have eight legs, and are easily recognized by a pair of grasping pincers and a narrow, segmented tail, often carried in a characteristic forward curve over the back and always ending with a stinger. The evolutionary history of scorpions goes back 435 million years. They mainly live in deserts but have adapted to a wide range of environmental conditions, and can be found on all continents except Antarctica. There are over 2,500 described species, with 22 extant (living) families recognized to date. Their taxonomy is being revised to account for 21st-century genomic studies.\"",
         "<b>Query:</b> \"Who is the chairman of Chelsea?\"\n" +
         "<b>Snippet:</b> \"Chelsea Football Club is an English professional football club based in Fulham, London. Founded in 1905, the club competes in the Premier League, the top division of English football. Chelsea are among England's most successful clubs, having won over thirty competitive honours, including six league titles and seven European trophies. Their home ground is Stamford Bridge.\"",
         "<b>Query:</b> \"How large is Canada?\"\n" +
@@ -699,6 +705,8 @@ function task() {
         "<b>Snippet:</b> \"The Great Lakes Collegiate Hockey League (GLCHL) is an American Collegiate Hockey Association (ACHA) Division I level ice hockey league. The GLCHL is made up of nine schools, eight of which are located in Michigan, with one school in Ohio.\"",
         "<b>Query:</b> \"us militairy pilot fitness\"\n" +
         "<b>Snippet:</b> \"The US Air Force Fitness Test (AFFT) is designed to test the abdominal circumference, muscular strength/endurance and cardiovascular respiratory fitness of airmen in the USAF. As part of the Fit to Fight program, the USAF adopted a more stringent physical fitness assessment; the new fitness program was put into effect on 1 June 2010.\"",
+        "<b>Query:</b> \"How many legs does a spider have?\"\n" +
+        "<b>Snippet:</b> \"Scorpions have eight legs, and are easily recognized by a pair of grasping pincers and a narrow, segmented tail, often carried in a characteristic forward curve over the back and always ending with a stinger. The evolutionary history of scorpions goes back 435 million years. They mainly live in deserts but have adapted to a wide range of environmental conditions, and can be found on all continents except Antarctica. There are over 2,500 described species, with 22 extant (living) families recognized to date. Their taxonomy is being revised to account for 21st-century genomic studies.\"",
         "<b>Query:</b> \"buy laptop or tablet for child\"\n" +
         "<b>Snippet:</b> \"Around the world, members of Generation Z are spending more time on electronic devices and less time reading books than before, with implications for their attention span, their vocabulary and thus their school grades, as well as their future in the modern economy.\""
     ];
@@ -707,7 +715,7 @@ function task() {
 
     function answerTask(relevance) {
         // Store the answer on the task.
-        answers['Q' + (taskNumber + 1)] = relevance;
+        answers.task['Q' + (taskNumber + 1)] = relevance;
 
         // Increment the task number
         taskNumber++;
@@ -718,7 +726,7 @@ function task() {
             task();
         } else {
             // Task is complete, start the survey.
-            survey();
+            attentionQuestion();
         }
     }
 
@@ -742,6 +750,33 @@ function task() {
 }
 
 let surveyNumber = 0;
+
+function attentionQuestion() {
+
+    function answerAttention(number) {
+        answers.attention['A1'] = number;
+        survey()
+    }
+
+    chatbot.talk([{
+        msg: "Now a small question to check your attention on the tasks: \"How many legs does a scorpion have?\""
+    }, {
+        buttons: [{
+            button: "Two",
+            func: () => answerAttention(2)
+        }, {
+            button: "Four",
+            func: () => answerAttention(4)
+        }, {
+            button: "Six",
+            func: () => answerAttention(6)
+        }, {
+            button: "Eight",
+            func: () => answerAttention(8)
+        }]
+    }]);
+
+}
 
 function survey() {
     const clarityButtons = ["Very vague", "Vague", "Neutral", "Clear", "Very clear"];
@@ -770,7 +805,7 @@ function survey() {
 
     function answerSurvey(relevance) {
         // Store the answer on the task.
-        answers['S' + (surveyNumber + 1)] = relevance;
+        answers.survey['S' + (surveyNumber + 1)] = relevance;
 
         // Increment the task number
         surveyNumber++;
@@ -799,24 +834,41 @@ function survey() {
     chatbot.talk(talkScript);
 }
 
+// Method to time the messages.
+let timeStart = (new Date()).getTime();
+let timePrevious = timeStart;
 
-function post(path, params, method='post') {
+function recordUserFlow(button) {
+    let timeNow = (new Date()).getTime();
+
+    // Push the time and which button was pressed on the flow array of the user.
+    answers.flow.push({
+        button: button,
+        time: (timeNow - timePrevious),
+        timeTotal: (timeNow - timeStart)
+    });
+
+    // Set the timePrevious to the time used.
+    timePrevious = timeNow;
+}
+
+function post(path, params, method = 'post') {
     const form = document.createElement('form');
     form.method = method;
     form.action = path;
     form.target = "dummyframe";
-  
+
     for (const key in params) {
-      if (params.hasOwnProperty(key)) {
-        const hiddenField = document.createElement('input');
-        hiddenField.type = 'hidden';
-        hiddenField.name = key;
-        hiddenField.value = params[key];
-  
-        form.appendChild(hiddenField);
-      }
+        if (params.hasOwnProperty(key)) {
+            const hiddenField = document.createElement('input');
+            hiddenField.type = 'hidden';
+            hiddenField.name = key;
+            hiddenField.value = params[key];
+
+            form.appendChild(hiddenField);
+        }
     }
-  
+
     document.body.appendChild(form);
     form.submit();
 }
@@ -834,6 +886,7 @@ function complete() {
     post("https://sander.gielisse.me/confirm_answers", answers);
 }
 
+
 // disable textarea, since we only care about button presses.
 document.getElementById("message-cover").style.display = "block";
 document.getElementById("message").disabled = true;
@@ -843,7 +896,7 @@ let textLength = 0; //S: 0, M: 1, L: 2
 let interactiveness = true;
 
 let identifier = "%IDENTIFIER%";
-console.log("Starting chatbot with identifier ", identifier)
+console.log("Starting chatbot with identifier ", identifier);
 
 // Start the script.
 window.onload = postStartingMessage();
