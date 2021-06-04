@@ -827,7 +827,10 @@ function complete() {
     console.log("The answers on the task: ", answers);
     answers['id'] = identifier;
     fetch("https://sander.gielisse.me/confirm_answers", {
-        method: "POST", 
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify(answers)
     }).then(res => {
         console.log("Request complete! response:", res);

@@ -46,11 +46,11 @@ app.get('/request_file', (req, res) => {
 })
 
 app.post('/confirm_answers', function(req, res) {
-    console.log("BODY", req.body)
-    // save this information
     var submission = req.body
-    var id = submission['id']
     var json = JSON.stringify(submission);
+    console.log("BODY", json)
+    // save this information
+    var id = submission.id
     fs.writeFile('./submissions/' + id + '.json', json, 'utf8', function(err){
         console.log("ERROR " + err);
     });
