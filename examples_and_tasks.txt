@@ -1,0 +1,57 @@
+
+SNIPPET EXAMPLE
+'Airplanes come in a variety of sizes, shapes, and wing configurations. The broad spectrum of uses for airplanes includes recreation, transportation of goods and people, military, and research.'
+
+QUERY EXAMPLE
+'What do planes transport?'
+
+================================================= RELEVANCE EXAMPLES =================================================
+
+=== 0 === IRRELEVANT
+Q: "average building height amsterdam"
+S: "Non-timber forest products (NTFPs) are useful foods, substances, materials and/or commodities obtained from forests other than timber. Harvest ranges from wild collection to farming. They typically include game animals, fur-bearers, nuts, seeds, berries, mushrooms, oils, sap, foliage, pollarding, medicinal plants, peat, mast, fuelwood, fish, insects, spices, and forage."
+
+=== 1 === PROBABLY NOT RELEVANT
+Q: "temples in europe"
+S: "The Bhringeswara Shiva temple is situated on the foothills of Dhauli and the left bank of the Daya River, in the southeastern outskirts of Bhubaneswar in the village Khatuapada. The temple is facing towards west and the presiding deity is a circular yoni pitha with a hole at the centre."
+
+=== 2 === PROBABLY RELEVANT
+Q: "manager of irvine victoria"
+S: "Irvine Victoria Football Club is a Scottish football club, based in the town of Irvine, North Ayrshire. Nicknamed Wee Vics and "Westenders", it was formed in 1904 and plays at Victoria Park, in Irvine. The team uniform is orange, blue and white stripes. Irvine Victoria play in the West of Scotland League Conference A."
+
+=== 3 === RELEVANT
+Q: "oldest dodge diplomat"
+S: "The Dodge Diplomat is an American mid-size car that was produced by Dodge from 1977 to 1989. It was built using the same design as the Plymouth Gran Fury in the U.S. market and the Plymouth Caravelle in Canada. It was also sold in Mexico between 1981 and 1982 as the Dodge Dart, and in Colombia as the Dodge Coronet."
+
+
+================================================= TASKS =================================================
+
+=== 1 ===
+Q: "How many legs does a spider have?"
+S: "Scorpions have eight legs, and are easily recognized by a pair of grasping pincers and a narrow, segmented tail, often carried in a characteristic forward curve over the back and always ending with a stinger. The evolutionary history of scorpions goes back 435 million years. They mainly live in deserts but have adapted to a wide range of environmental conditions, and can be found on all continents except Antarctica. There are over 2,500 described species, with 22 extant (living) families recognized to date. Their taxonomy is being revised to account for 21st-century genomic studies."
+REL: 0 - NONE
+
+=== 2 ===
+Q: "Who is the chairman of Chelsea?"
+S: "Chelsea Football Club is an English professional football club based in Fulham, London. Founded in 1905, the club competes in the Premier League, the top division of English football. Chelsea are among England's most successful clubs, having won over thirty competitive honours, including six league titles and seven European trophies. Their home ground is Stamford Bridge."
+REL: 2 - LIKELY RELEVANT
+
+=== 3 ===
+Q: "How large is Canada?"
+S: "Canada is a country in North America. Its ten provinces and three territories extend from the Atlantic to the Pacific and northward into the Arctic Ocean, covering 9.98 million square kilometres (3.85 million square miles), making it the world's second-largest country by total area. Its southern and western border with the United States, stretching 8,891 kilometres (5,525 mi), is the world's longest bi-national land border. Canada's capital is Ottawa, and its three largest metropolitan areas are Toronto, Montreal, and Vancouver."
+REL: 3 - RELEVANT
+
+=== 4 ===
+Q: "Hockey clubs europe"
+S: "The Great Lakes Collegiate Hockey League (GLCHL) is an American Collegiate Hockey Association (ACHA) Division I level ice hockey league. The GLCHL is made up of nine schools, eight of which are located in Michigan, with one school in Ohio."
+REL: 1 - PROBABLY NOT RELEVANT
+
+=== 5 ===
+Q: "us militairy pilot fitness"
+S: "The US Air Force Fitness Test (AFFT) is designed to test the abdominal circumference, muscular strength/endurance and cardiovascular respiratory fitness of airmen in the USAF. As part of the Fit to Fight program, the USAF adopted a more stringent physical fitness assessment; the new fitness program was put into effect on 1 June 2010."
+REL: 3 - RELEVANT
+
+=== 6 ===
+Q: "buy laptop or tablet for child"
+S: "Around the world, members of Generation Z are spending more time on electronic devices and less time reading books than before, with implications for their attention span, their vocabulary and thus their school grades, as well as their future in the modern economy."
+REL: 1 - PROBABLY NOT RELEVANT
