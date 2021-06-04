@@ -527,7 +527,7 @@ function explainRelevance() {
                 msg: messages[textLength]
             }, {
                 buttons: [{
-                    button: "Give me a relevance example",
+                    button: "Give me a relevance example.",
                     func: showRelevanceExample
                 }, {
                     button: "I understand, lets go back to the problem.",
@@ -752,10 +752,10 @@ function survey() {
         "<b>Goal clarity</b> - To what extent is the goal or desired outcome of the task clear?",
         buttons: clarityButtons
     }, {
-        survey: "<b>Role clarity</b> - To what extent are the steps or activities required to achieve the desired outcome of the task clear",
+        survey: "<b>Role clarity</b> - To what extent are the steps or activities required to achieve the desired outcome of the task clear?",
         buttons: clarityButtons
     }, {
-        survey: "Rate the overall task clarity of the tasks presented above on the following scale",
+        survey: "Please rate the overall task clarity of the tasks presented above on the following scale.",
         buttons: clarityButtons
     }, {
         survey: "To what extent did the <b>goal clarity</b> influence your overall task clarity rating?",
@@ -816,27 +816,6 @@ function recordUserFlow(button) {
     timePrevious = timeNow;
 }
 
-function post(path, params, method = 'post') {
-    const form = document.createElement('form');
-    form.method = method;
-    form.action = path;
-    form.target = "dummyframe";
-
-    for (const key in params) {
-        if (params.hasOwnProperty(key)) {
-            const hiddenField = document.createElement('input');
-            hiddenField.type = 'hidden';
-            hiddenField.name = key;
-            hiddenField.value = params[key];
-
-            form.appendChild(hiddenField);
-        }
-    }
-
-    document.body.appendChild(form);
-    form.submit();
-}
-
 function complete() {
     chatbot.talk([{
         msg: "The task is completed, thank you very much!"
@@ -847,7 +826,13 @@ function complete() {
     // Send the answers back to Toloka / Sanders personal website for convenience.
     console.log("The answers on the task: ", answers);
     answers['id'] = identifier;
-    post("https://sander.gielisse.me/confirm_answers", answers);
+    fetch("https://sander.gielisse.me/confirm_answers", {
+        method: "POST", 
+        body: JSON.stringify(answers)
+    }).then(res => {
+        console.log("Request complete! response:", res);
+    });
+
 }
 
 // disable textArea, since we only care about button presses.
