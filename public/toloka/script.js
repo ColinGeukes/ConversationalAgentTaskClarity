@@ -748,20 +748,20 @@ function survey() {
 
     const surveys = [{
         survey: "Thank you very much for your valuable contributions!\n" +
-        "Now only a small survey is left regarding the tasks.\n" +
-        "<b>Goal clarity</b> - To what extent is the goal or desired outcome of the task clear?",
+        "Now only a small survey is left regarding the clarity of the tasks.\n" +
+        "To what extent was the goal or desired outcome of the task clear?",
         buttons: clarityButtons
     }, {
-        survey: "<b>Role clarity</b> - To what extent are the steps or activities required to achieve the desired outcome of the task clear?",
+        survey: "To what extent were the steps required to achieve the desired outcome of the task clear?",
         buttons: clarityButtons
     }, {
-        survey: "Please rate the overall task clarity of the tasks presented above on the following scale.",
+        survey: "Please rate the overall clarity of the tasks on the following scale.",
         buttons: clarityButtons
     }, {
-        survey: "To what extent did the <b>goal clarity</b> influence your overall task clarity rating?",
+        survey: "To what extent was your overall task clarity rating influcenced by how clear the goal of the task was?",
         buttons: influenceButtons
     }, {
-        survey: "To what extent did the <b>role clarity</b> influence your overall task clarity rating?",
+        survey: "To what extent was your overall task clarity rating influcenced by how clear the steps needed to achieve the goal were?",
         buttons: influenceButtons
     }];
 
