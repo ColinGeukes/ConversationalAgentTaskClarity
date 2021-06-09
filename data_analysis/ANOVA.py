@@ -4,7 +4,7 @@ import pandas
 import os
 import json
 
-data_list = {'text_length': [], 'interactive': [], 'score': []}
+data_list = {'text_length': [], 'interactive': [], 'overall_clarity': []}
 for interactive in [False, True]:  # True for interactive and False for non-interactive
     for msg_length in [0, 1, 2]:  # 0 for short, 1 for medium and 2 for long
 
@@ -16,13 +16,13 @@ for interactive in [False, True]:  # True for interactive and False for non-inte
                     data = json.loads(f.readline())
                     data_list['text_length'].append(data['params']['textLength'])
                     data_list['interactive'].append(data['params']['interactiveness'])
-                    data_list['score'].append(data['survey']['S1'])
+                    data_list['overall_clarity'].append(data['survey']['S3'])
 
 df = pandas.DataFrame(data=data_list)
 
 print(df)
 
-m = ols("score ~ C(text_length)*C(interactive)", data=df).fit()
+m = ols("overall_clarity ~ C(text_length)*C(interactive)", data=df).fit()
 anova = sm.stats.anova_lm(m, type=5)
 anova.to_csv('anova.csv')
 print(anova)
