@@ -23,12 +23,17 @@ for interactive in [False, True]:  # True for interactive and False for non-inte
                         for task in range(len(data['task'])):
                             given_answer = data['task']['Q' + str(task + 1)]
                             task_answers[task].append(given_answer)
-
+similarity = [0, 0, 0, 0, 0, 0]
 for i in range(len(task_answers)):
     modus_answers.append(max(set(task_answers[i]), key=task_answers[i].count))
     mean_answers.append(np.mean(task_answers[i]))
+    if modus_answers[i] == correct_answers[i]:
+        similarity[i] = 1
+print(modus_answers)
+print("similarity between ground truth and most frequent answer: " + str(similarity.count(1) / len(similarity)))
 
-data_list = {'text_length': [], 'interactive': [], 'overall_clarity': [], 'task_score': [], 'task_score_modus': [], 'task_score_mean': []}
+data_list = {'text_length': [], 'interactive': [], 'overall_clarity': [], 'task_score': [], 'task_score_modus': [],
+             'task_score_mean': []}
 for interactive in [False, True]:  # True for interactive and False for non-interactive
     for msg_length in [0, 1, 2]:  # 0 for short, 1 for medium and 2 for long
         directory = fr'../f_submissions/f_submissions_L{msg_length}_{interactive}_20p'
