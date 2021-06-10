@@ -3,14 +3,14 @@ import glob
 import json
 import matplotlib.pyplot as plt
 
-names = [x.split("/")[-1] for x in glob.glob("./f_submissions/*")]
+names = [x.split("/")[-1] for x in glob.glob("./combined_submissions/*")]
 print(names)
 names.sort(key=lambda x: (x.split("_")[3], x.split("_")[2]))
 
 result_dict = {}
 for name in names:
 	l = []
-	files = glob.glob("./f_submissions/" + name + "/*.json")
+	files = glob.glob("./combined_submissions/" + name + "/*.json")
 	for f in files:
 		with open(f, 'r') as of:
 			j = json.load(of)
@@ -25,7 +25,7 @@ def calculate(fname, calc_func):
 	es = []
 	
 	res_typed = {}
-	for t in ["L0", "L1", "L2", "true", "false"]:
+	for t in ["L0", "L2", "true", "false"]: # "L1", 
 		res_typed[t] = []
 
 	for name in names:
@@ -37,7 +37,7 @@ def calculate(fname, calc_func):
 				local.append(v)
 
 		y = np.mean(local)
-		e = np.std(local)
+		e = np.std(local) / 8
 		data = name.split("_")[2:4]
 		xs.append(str(data))
 		ys.append(y)
@@ -56,16 +56,17 @@ def calculate(fname, calc_func):
 
 	for key, value in res_typed.items():
 		values = res_typed[key]
+		# print('values', values)
 		avg = np.mean(values)
-		plt.plot([-1, 7], [avg, avg], label=key)
+		plt.plot([-1, 5], [avg, avg], label=key)
 
 	plt.legend()
-	plt.title("Graph " + fname)
+	plt.title(fname)
 	plt.savefig('./figures/' + fname + '.png')
 
 def func_attention(j):
 	return 1 if j['attention']['A1'] == 8 else 0
-calculate("Attention Correct", func_attention)
+calculate("Attention Correct (higher is better)", func_attention)
 
 def func_accuracy(j):
 	if j['attention']['A1'] != 8:
@@ -76,24 +77,25 @@ def func_accuracy(j):
 	actual = np.array([2, 3, 1, 3, 0, 1])
 	diff = actual - res
 	diff = np.square(diff)
+	# print('diff', diff)
 	return np.mean(diff)
-calculate("Mean Squared Error Answers", func_accuracy)
+calculate("Mean Squared Error Answers (lower is better)", func_accuracy)
 
 def func_overall_clarity(j):
 	if j['attention']['A1'] != 8:
 		return None
 	return int(j['survey']['S3'])
-calculate("Overall Clarity", func_overall_clarity)
+calculate("Overall Clarity (higher is better)", func_overall_clarity)
 
 def func_goal_clarity(j):
 	if j['attention']['A1'] != 8:
 		return None
 	return int(j['survey']['S1'])
-calculate("Goal Clarity", func_goal_clarity)
+calculate("Goal Clarity (higher is better)", func_goal_clarity)
 
 def func_role_clarity(j):
 	if j['attention']['A1'] != 8:
 		return None
 	return int(j['survey']['S2'])
-calculate("Role Clarity", func_role_clarity)
+calculate("Role Clarity (higher is better)", func_role_clarity)
 

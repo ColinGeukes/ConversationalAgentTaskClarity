@@ -1,0 +1,37 @@
+just observations from graph; statistical tests were not performed here!
+
+
+starting with the graph for the attention question;
+	- highest for non-interactive; suggests that users that are allowed to self-navigate are less focussed/concentrated on what they are doing next
+	- message length SHORT might result into slightly higher attention, suggesting for longer messages people might loose focus
+best [ I=FALSE ]
+
+
+graph for mean squared error on answers (with respect to what we consider to be the correct answer)
+	- best performance for SHORT messages with interactiveness, however interactive with long messages performs terrible; people maybe don't like
+	  reading a lot of explanation / examples, which leads to them skipping the explanation and then perform bad on the task
+	- making it non-interactive partly solves this issue for both SHORT and LONG; it "forces" users to still read the examples, so they perform better again
+best all fine EXCEPT [ I=TRUE, L=LONG ]
+
+
+role clarity
+	- message length not really a factor; non-interactiveness has highest clarity, while allowing for interactiveness leads to lower role clarity
+best [ I=FALSE ]
+
+goal clarity
+	- same as for role clarity; non-interactiveness has highest by a decent margin, while allowing for interactiveness only decreases it
+	- no big difference between short and long messages
+best [ I=FALSE ]
+
+
+overall clarity
+	- overall clarity was highest for long messages without interactiveness, suggesting that "forcing" people to read everything is a good thing
+	- with shorter messages, the overall clarity is lower, suggesting that the long messages provide a more clear way of explaining
+best = [ I=FALSE, L=LONG ]
+
+
+OVERALL SUMMARY
+we did not find any evidence that allowing for self-navigation through interactiveness has a positive effect; on the contrary, we actually showed it
+to have a negative effect on the accuracy of the workers. The message length does not seem an important factor in most cases, however there were
+two cases were the LONG messages showed an improvement while there were no advantages observed from using short messages. This suggests that overall
+the non-interactive variant with long messages seems most favorable.
