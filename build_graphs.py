@@ -10,7 +10,7 @@ def most_frequent(List):
 
 names = [x.split("/")[-1] for x in glob.glob("./combined_submissions/*")]
 print(names)
-names.sort(key=lambda x: (x.split("_")[3], x.split("_")[2]))
+names.sort(key=lambda x: (x.split("_")[2], x.split("_")[3]))
 
 result_dict = {}
 for name in names:
@@ -30,13 +30,20 @@ def calculate(fname, calc_func):
 	es = []
 	
 	res_typed = {}
-	for t in ["L0", "L1", "L2", "true", "false"]: # "L1", 
+	for t in ["length short", "length medium", "length long", "interactive true", "interactive false"]: # "L1", 
 		res_typed[t] = []
 
 	for name in names:
+		spl = name.split("_")
+		length = int(spl[2][1])
+		interactive = spl[3] == 'true'
+
 		l = result_dict[name]
 		local = []
 		for j in l:
+			if j['params']['textLength'] != length or j['params']['interactiveness'] != interactive:
+				raise Exception("length or interactiveness not matching")
+
 			v = calc_func(j)
 			if v is not None:
 				local.append(v)
@@ -61,10 +68,12 @@ def calculate(fname, calc_func):
 		"""
 
 		y = np.mean(local)
-		e = np.std(local) / 4
+		e = np.std(local)
 		# y = most_frequent(local)
-		data = name.split("_")[2:4]
-		xs.append(str(data))
+		data = name.replace("L0", "length short").replace("L1", "length medium").replace("L2", "length long")
+		data = data.replace("true", "interactive true").replace("false", "interactive false")
+		data = data.split("_")[2:4]
+		xs.append(str(data).replace("[", "").replace("]", "").replace("\'", "").replace("interactive", "").replace("length", "").replace(" ", ""))
 		ys.append(y)
 		es.append(e)
 
@@ -83,7 +92,7 @@ def calculate(fname, calc_func):
 		values = res_typed[key]
 		# print('values', values)
 		avg = np.mean(values)
-		plt.plot([-1, 6], [avg, avg], label=key)
+		plt.plot([-1, 6], [avg, avg], label=key, linewidth=1)
 
 	plt.legend()
 	plt.title(fname)
