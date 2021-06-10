@@ -843,8 +843,8 @@ document.getElementById("message-cover").style.display = "block";
 document.getElementById("message").disabled = true;
 
 // Hyper-parameters setup.
-let textLength = 2; //S: 0, M: 1, L: 2
-let interactiveness = false;
+let textLength = 1; //S: 0, M: 1, L: 2
+let interactiveness = true;
 
 console.log("textLength", textLength, "interactive", interactiveness)
 

@@ -2,6 +2,11 @@ import numpy as np
 import glob
 import json
 import matplotlib.pyplot as plt
+from collections import Counter
+
+def most_frequent(List):
+    occurence_count = Counter(List)
+    return occurence_count.most_common(1)[0][0]
 
 names = [x.split("/")[-1] for x in glob.glob("./combined_submissions/*")]
 print(names)
@@ -25,7 +30,7 @@ def calculate(fname, calc_func):
 	es = []
 	
 	res_typed = {}
-	for t in ["L0", "L2", "true", "false"]: # "L1", 
+	for t in ["L0", "L1", "L2", "true", "false"]: # "L1", 
 		res_typed[t] = []
 
 	for name in names:
@@ -35,9 +40,29 @@ def calculate(fname, calc_func):
 			v = calc_func(j)
 			if v is not None:
 				local.append(v)
+		# local = np.array(local)
+
+		"""
+		# remove outliers
+		mean = np.mean(local)
+		normalized = local - mean
+
+		std = np.std(local)
+		normalized /= std
+
+		res_std = np.std(normalized)
+
+		result = []
+		for i in range(local.shape[0]):
+			actual = local[i]
+			normed = normalized[i]
+			if normed < 3 * res_std:
+				result.append(actual)
+		"""
 
 		y = np.mean(local)
-		e = np.std(local) / 8
+		e = np.std(local) / 4
+		# y = most_frequent(local)
 		data = name.split("_")[2:4]
 		xs.append(str(data))
 		ys.append(y)
@@ -52,13 +77,13 @@ def calculate(fname, calc_func):
 	axes = plt.gca()
 	# axes.set_ylim([0,1])
 	plt.xticks(rotation=16)
-	plt.errorbar(xs, ys, yerr=es, fmt='o', markersize=8, capsize=8)
+	plt.errorbar(xs, ys, fmt='o', yerr=es, markersize=8, capsize=8) # 
 
 	for key, value in res_typed.items():
 		values = res_typed[key]
 		# print('values', values)
 		avg = np.mean(values)
-		plt.plot([-1, 5], [avg, avg], label=key)
+		plt.plot([-1, 6], [avg, avg], label=key)
 
 	plt.legend()
 	plt.title(fname)
