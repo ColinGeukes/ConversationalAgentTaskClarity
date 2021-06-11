@@ -12,7 +12,7 @@ mean_answers = []
 task_answers = [[], [], [], [], [], []]
 for interactive in [False, True]:  # True for interactive and False for non-interactive
     for msg_length in [0, 1, 2]:  # 0 for short, 1 for medium and 2 for long
-        directory = fr'../f_submissions/f_submissions_L{msg_length}_{interactive}_20p'
+        directory = fr'../combined_submissions/s2_submissions_L{msg_length}_{interactive}'
         for entry in os.scandir(directory):
             if entry.path.endswith(".json") and entry.is_file():
                 # print(entry.path)
@@ -36,7 +36,7 @@ data_list = {'text_length': [], 'interactive': [], 'overall_clarity': [], 'task_
              'task_score_mean': []}
 for interactive in [False, True]:  # True for interactive and False for non-interactive
     for msg_length in [0, 1, 2]:  # 0 for short, 1 for medium and 2 for long
-        directory = fr'../f_submissions/f_submissions_L{msg_length}_{interactive}_20p'
+        directory = fr'../combined_submissions/s2_submissions_L{msg_length}_{interactive}'
         for entry in os.scandir(directory):
             if entry.path.endswith(".json") and entry.is_file():
                 # print(entry.path)
