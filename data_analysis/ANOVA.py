@@ -33,7 +33,7 @@ print(modus_answers)
 print("similarity between ground truth and most frequent answer: " + str(similarity.count(1) / len(similarity)))
 
 data_list = {'text_length': [], 'interactive': [], 'overall_clarity': [], 'task_score': [], 'task_score_modus': [],
-             'task_score_mean': []}
+             'task_score_mean': [], 'intro_time': []}
 for interactive in [False, True]:  # True for interactive and False for non-interactive
     for msg_length in [0, 1, 2]:  # 0 for short, 1 for medium and 2 for long
         directory = fr'../combined_submissions/s2_submissions_L{msg_length}_{interactive}'
@@ -46,6 +46,9 @@ for interactive in [False, True]:  # True for interactive and False for non-inte
                         data_list['text_length'].append(data['params']['textLength'])
                         data_list['interactive'].append(data['params']['interactiveness'])
                         data_list['overall_clarity'].append(data['survey']['S3'])
+                        for flow_entry in data['flow']:
+                            if flow_entry['button'] == 'startthetask':
+                                data_list['intro_time'].append(flow_entry['timeTotal']/1000)
                         sum_scores = 0
                         modus_scores = 0
                         mean_scores = 0
@@ -90,3 +93,10 @@ anova = sm.stats.anova_lm(m, type=2)
 anova.to_csv('anova-task-score-mean.csv')
 print(anova)
 print("ANOVA task scores mean answers as ground truth")
+
+# ANOVA Correct answers - mean score
+m = ols("intro_time ~ C(text_length)*C(interactive)", data=df).fit()
+anova = sm.stats.anova_lm(m, type=2)
+anova.to_csv('anova-task-intro-time.csv')
+print(anova)
+print("ANOVA intro time")
