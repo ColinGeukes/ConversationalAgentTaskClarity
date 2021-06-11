@@ -96,7 +96,7 @@ def calculate(fname, calc_func):
 
 	plt.legend()
 	plt.title(fname)
-	plt.savefig('./figures/' + fname + '.png')
+	plt.savefig('./figures/' + fname + '.pdf', bbox_inches='tight')
 
 def func_attention(j):
 	return 1 if j['attention']['A1'] == 8 else 0
