@@ -97,7 +97,7 @@ print(anova)
 print("ANOVA task scores mean answers as ground truth")
 print("------------------------------------------------------------------------\n")
 
-# ANOVA Correct answers - mean score
+# ANOVA Correct answers - intro time
 m = ols("intro_time ~ C(text_length)*C(interactive)", data=df).fit()
 anova = sm.stats.anova_lm(m, type=2)
 anova.to_csv('anova-task-intro-time.csv')

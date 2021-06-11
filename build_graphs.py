@@ -24,7 +24,7 @@ for name in names:
 
 print("Loaded files!")
 
-def calculate(fname, calc_func):
+def calculate(fname, saveas, calc_func):
 	xs = []
 	ys = []
 	es = []
@@ -86,7 +86,7 @@ def calculate(fname, calc_func):
 	axes = plt.gca()
 	# axes.set_ylim([0,1])
 	plt.xticks(rotation=16)
-	plt.errorbar(xs, ys, fmt='o', yerr=es, markersize=8, capsize=8) # 
+	plt.bar(xs, ys, yerr=es, capsize=8, alpha=0.2) # 
 
 	for key, value in res_typed.items():
 		values = res_typed[key]
@@ -96,11 +96,11 @@ def calculate(fname, calc_func):
 
 	plt.legend()
 	plt.title(fname)
-	plt.savefig('./figures/' + fname + '.png')
+	plt.savefig('./figures/' + saveas + '.pdf', bbox_inches='tight')
 
 def func_attention(j):
 	return 1 if j['attention']['A1'] == 8 else 0
-calculate("Attention Correct (higher is better)", func_attention)
+calculate("Attention Correct (higher is better)", 'attention_correct', func_attention)
 
 def func_accuracy(j):
 	if j['attention']['A1'] != 8:
@@ -110,26 +110,35 @@ def func_accuracy(j):
 	res = np.array([int(answers["Q" + str(x)]) for x in range(1, 7)])
 	actual = np.array([2, 3, 1, 3, 0, 1])
 	diff = actual - res
-	diff = np.square(diff)
+	diff = np.abs(diff)
 	# print('diff', diff)
 	return np.mean(diff)
-calculate("Mean Squared Error Answers (lower is better)", func_accuracy)
+calculate("Mean Absolute Error Answers (lower is better)", 'absolute_error', func_accuracy)
 
 def func_overall_clarity(j):
 	if j['attention']['A1'] != 8:
 		return None
 	return int(j['survey']['S3'])
-calculate("Overall Clarity (higher is better)", func_overall_clarity)
+calculate("Overall Clarity (higher is better)", 'overall_clarity', func_overall_clarity)
 
 def func_goal_clarity(j):
 	if j['attention']['A1'] != 8:
 		return None
 	return int(j['survey']['S1'])
-calculate("Goal Clarity (higher is better)", func_goal_clarity)
+calculate("Goal Clarity (higher is better)", 'goal_clarity', func_goal_clarity)
 
 def func_role_clarity(j):
 	if j['attention']['A1'] != 8:
 		return None
 	return int(j['survey']['S2'])
-calculate("Role Clarity (higher is better)", func_role_clarity)
+calculate("Role Clarity (higher is better)", 'role_clarity', func_role_clarity)
+
+def func_time(j):
+	if j['attention']['A1'] != 8:
+		return None
+	for click in j['flow']:
+		if click['button'] == 'startthetask':
+			return click['timeTotal']
+calculate("Introduction Time", 'time_taken', func_time)
+
 
