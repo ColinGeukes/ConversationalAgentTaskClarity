@@ -33,7 +33,7 @@ print(modus_answers)
 print("similarity between ground truth and most frequent answer: " + str(similarity.count(1) / len(similarity)))
 
 data_list = {'text_length': [], 'interactive': [], 'overall_clarity': [], 'task_score': [], 'task_score_modus': [],
-             'task_score_mean': [], 'intro_time': []}
+             'task_score_mean': [], 'intro_time': [], 'goal_clarity': [], 'role_clarity': []}
 for interactive in [False, True]:  # True for interactive and False for non-interactive
     for msg_length in [0, 1, 2]:  # 0 for short, 1 for medium and 2 for long
         directory = fr'../combined_submissions/s2_submissions_L{msg_length}_{interactive}'
@@ -45,6 +45,8 @@ for interactive in [False, True]:  # True for interactive and False for non-inte
                     if data['attention']['A1'] == 8:
                         data_list['text_length'].append(data['params']['textLength'])
                         data_list['interactive'].append(data['params']['interactiveness'])
+                        data_list['goal_clarity'].append(data['survey']['S1'])
+                        data_list['role_clarity'].append(data['survey']['S2'])
                         data_list['overall_clarity'].append(data['survey']['S3'])
                         for flow_entry in data['flow']:
                             if flow_entry['button'] == 'startthetask':
@@ -93,6 +95,7 @@ anova = sm.stats.anova_lm(m, type=2)
 anova.to_csv('anova-task-score-mean.csv')
 print(anova)
 print("ANOVA task scores mean answers as ground truth")
+print("------------------------------------------------------------------------\n")
 
 # ANOVA Correct answers - mean score
 m = ols("intro_time ~ C(text_length)*C(interactive)", data=df).fit()
@@ -100,3 +103,20 @@ anova = sm.stats.anova_lm(m, type=2)
 anova.to_csv('anova-task-intro-time.csv')
 print(anova)
 print("ANOVA intro time")
+print("------------------------------------------------------------------------\n")
+
+# ANOVA goal_clarity vs text_length and interactive
+m = ols("goal_clarity ~ C(text_length)*C(interactive)", data=df).fit()
+anova = sm.stats.anova_lm(m, type=2)
+anova.to_csv('anova-goal-clarity.csv')
+print(anova)
+print("ANOVA perceived goal clarity")
+print("------------------------------------------------------------------------\n")
+
+# ANOVA role_clarity vs text_length and interactive
+m = ols("role_clarity ~ C(text_length)*C(interactive)", data=df).fit()
+anova = sm.stats.anova_lm(m, type=2)
+anova.to_csv('anova-role-clarity.csv')
+print(anova)
+print("ANOVA perceived role clarity")
+print("------------------------------------------------------------------------\n")
